@@ -4,7 +4,7 @@ This is an Android app that demos a simple connection to Firebase.
 ## Getting Started
 
 [Download](https://github.com/Mondieki/AndroidAPKs/raw/master/ExDBConn.apk) the `apk` here.
-[Clone](https://github.com/JacobMue/ExternalDatabase.git)the source code from this repo.
+[Clone](https://github.com/JacobMue/ExternalDatabase.git) the source code from this repo.
 
 ### Prerequisities
 
