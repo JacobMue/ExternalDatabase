@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            Toast.makeText(MainActivity.this, "Failed Sign up.",
+                            Toast.makeText(MainActivity.this, "Failed to sign up.",
                                     Toast.LENGTH_SHORT).show();
                         }
 
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
                             Log.w(TAG, "signInWithEmail:failed", task.getException());
-                            Toast.makeText(MainActivity.this, "Failed sign in.",
+                            Toast.makeText(MainActivity.this, "Failed to sign in.",
                                     Toast.LENGTH_SHORT).show();
                         }
 
@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
             // authenticate with your backend server, if you have one. Use
             // FirebaseUser.getToken() instead.
             String uid = user.getUid();
-            txtResult.setText("Logged In as:\n\nEmail Address : "+user.getEmail()+"\n\nUser ID : "+user.getUid());
+            txtResult.setText("Logged in as:\n\nEmail Address : "+user.getEmail()+"\n\nUser ID : "+user.getUid());
 
         }
     }
