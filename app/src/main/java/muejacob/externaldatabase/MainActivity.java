@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
             // authenticate with your backend server, if you have one. Use
             // FirebaseUser.getToken() instead.
             String uid = user.getUid();
-            txtResult.setText("Name"+user.getDisplayName()+"\nEmail"+user.getEmail()+"\nUser ID"+user.getUid());
+            txtResult.setText("Logged In as:\n\nEmail Address : "+user.getEmail()+"\n\nUser ID : "+user.getUid());
 
         }
     }
