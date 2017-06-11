@@ -5,10 +5,12 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,7 +26,12 @@ public class MainActivity extends AppCompatActivity {
     private String TAG="Firebase Errors";
 
     EditText edtEmail,edtPassword;
-    Button btnMain;
+    Button btnMain,btnLogout;
+    TextView txtResult,txtAccount;
+    CardView cdContainer;
+
+    private boolean checkAccount=false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +40,19 @@ public class MainActivity extends AppCompatActivity {
 
         edtEmail=(EditText)findViewById(R.id.edtEmail);
         edtPassword=(EditText)findViewById(R.id.edtPassword);
-
+        txtResult=(TextView)findViewById(R.id.txtResult);
+        txtAccount= (TextView) findViewById(R.id.txtAccount);
+        cdContainer=(CardView) findViewById(R.id.cdContainer);
         btnMain=(Button)findViewById(R.id.btnClick);
-
+        btnLogout=(Button)findViewById(R.id.btnLogout);
         btnMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createAccount(edtEmail.getText().toString(),edtPassword.getText().toString());
+                if(isCheckAccount()) {
+                    createAccount(edtEmail.getText().toString(), edtPassword.getText().toString());
+                }else{
+                    signIn(edtEmail.getText().toString(), edtPassword.getText().toString());
+                }
             }
         });
 
@@ -51,8 +64,11 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
+                    logoutLayout();
+                    getCurrentUser();
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
+                    loginLayout();
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
@@ -60,7 +76,57 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        txtAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isCheckAccount()) {
+                    loginLayout();
+                }else{
+                    registerLayout();
+                }
+            }
+        });
 
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuth.signOut();
+                loginLayout();
+            }
+        });
+
+
+    }
+
+    private void loginLayout(){
+        txtAccount.setText("Not yet a member? Sign up.");
+        btnLogout.setVisibility(View.GONE);
+        txtResult.setVisibility(View.GONE);
+        cdContainer.setVisibility(View.VISIBLE);
+        setCheckAccount(false);
+        btnMain.setText("LOGIN");
+        edtEmail.setText("");
+        edtPassword.setText("");
+    }
+
+    private void registerLayout(){
+        txtAccount.setText("Already a member? Sign in.");
+        btnLogout.setVisibility(View.GONE);
+        txtResult.setVisibility(View.GONE);
+        cdContainer.setVisibility(View.VISIBLE);
+        setCheckAccount(true);
+        btnMain.setText("SIGN UP");
+        edtEmail.setText("");
+        edtPassword.setText("");
+    }
+
+    private void logoutLayout(){
+        txtAccount.setText("");
+        btnLogout.setVisibility(View.VISIBLE);
+        txtResult.setVisibility(View.VISIBLE);
+        cdContainer.setVisibility(View.GONE);
+        edtEmail.setText("");
+        edtPassword.setText("");
     }
 
     private void createAccount(String email,String password){
@@ -69,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
-
+                        loginLayout();
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
@@ -116,6 +182,8 @@ public class MainActivity extends AppCompatActivity {
             // authenticate with your backend server, if you have one. Use
             // FirebaseUser.getToken() instead.
             String uid = user.getUid();
+            txtResult.setText("Name"+user.getDisplayName()+"\nEmail"+user.getEmail()+"\nUser ID"+user.getUid());
+
         }
     }
 
@@ -133,4 +201,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public boolean isCheckAccount() {
+        return checkAccount;
+    }
+
+    public void setCheckAccount(boolean checkAccount) {
+        this.checkAccount = checkAccount;
+    }
 }
