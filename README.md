@@ -14,6 +14,3 @@ This is an Android app that demos a simple connection to Firebase.
 2. Firebase account.
 
 ## Authors
-
-* [**Jake Mue**](https://github.com/JacobMue/)
-* [**Mike Ondieki**](https://github.com/Mondieki/)
